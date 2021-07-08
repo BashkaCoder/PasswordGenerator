@@ -43,10 +43,6 @@ int main()
 {
 	srand((unsigned int)time(0));
 
-	std::cout << easySymbols << std::endl;
-	std::cout << normalSymbols << std::endl;
-	std::cout << hardSymbols << std::endl;
-
 	bool quit = false;
 
 	std::vector<std::string> passwords; // Vector to store current passwords.
