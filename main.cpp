@@ -230,15 +230,16 @@ PasswordDifficulty getDifficulty()
 	return static_cast<PasswordDifficulty>(value[0] - '0'); // returns entered difficulty
 }
 
+//Creates file passwords.txt and adds to it generated passwords or just appends if already exists
 void saveToFile(const std::vector<std::string>& passwords)
 {
-	std::ofstream outputFile("passwords.txt", std::fstream::out | std::fstream::app);
+	std::ofstream outputFile("passwords.txt", std::fstream::out | std::fstream::app); 
 	
 	if (outputFile.is_open())
 	{
 		std::time_t current_time = std::time(0);
 		std::tm* timestamp = std::localtime(&current_time);
-		char buffer[80];
+		char buffer[80];//buffer for storing timestamp
 		strftime(buffer, 80, "%c", timestamp);
 
 		outputFile << '[' << buffer << ']' << std::endl;
