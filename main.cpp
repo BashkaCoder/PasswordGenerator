@@ -41,7 +41,7 @@ std::string hardSymbols   = normalSymbols + " !\"#$%&\'()*+-,./;:<=>?@[\\]^_`{|}
 
 int main()
 {
-	srand(time(0));
+	srand((unsigned int)time(0));
 
 	std::cout << easySymbols << std::endl;
 	std::cout << normalSymbols << std::endl;
@@ -166,7 +166,6 @@ std::string generatePassword(int length, PasswordDifficulty difficulty)
 		{
 		case PasswordDifficulty::Easy:
 			result += easySymbols[(rand() % easySymbols.size() + rand() % easySymbols.size())/2];
-			//result += easySymbols[rand() % easySymbols.size()];
 			break;
 		case PasswordDifficulty::Normal:
 			result += normalSymbols[rand() % normalSymbols.size()];
@@ -241,7 +240,6 @@ void saveToFile(const std::vector<std::string>& passwords)
 		std::tm* timestamp = std::localtime(&current_time);
 		char buffer[80];
 		strftime(buffer, 80, "%c", timestamp);
-
 
 		outputFile << '[' << buffer << ']' << std::endl;
 		for (const auto& password : passwords)
