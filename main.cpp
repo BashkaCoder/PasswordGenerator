@@ -1,8 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>
 
 enum class Options
 {
@@ -29,6 +32,8 @@ std::string generatePassword(int length, PasswordDifficulty difficulty);
 void generatePasswords(std::vector<std::string>& passwords, int amount, int length, PasswordDifficulty difficulty);
 
 void printVector(const std::vector<std::string>& v);
+void saveToFile(const std::vector<std::string>& passwords);
+
 
 std::string easySymbols   = "1234567890qwertyuiopasdfghjklzxcvbmn";
 std::string normalSymbols = easySymbols + "QWERTYUIOPMNBVZCXASDFGHLKJ";
@@ -80,6 +85,12 @@ int main()
 		}
 
 		bool result = SaveToFileMenu();
+
+		if (result)
+		{
+			saveToFile(passwords);
+		}
+
 	} while (!quit);
 
 	return 0;
@@ -101,8 +112,6 @@ int getInput()
 		std::getline(std::cin, value);
 
 	} while ((char)value[0] - '0' < 0 || (char)value[0] - '0' > 2 || value.size()>1);
-	//std::cin.clear();
-	//fflush(stdin);
 	return (int) (value[0]-'0');
 }
 
@@ -181,12 +190,12 @@ void generatePasswords(std::vector<std::string>& passwords, int amount, int leng
 
 void printVector(const std::vector<std::string>& v)
 {
-	std::cout << "---Printing vector---" << std::endl;
+	std::cout << "---Printing---" << std::endl;
 	for (const auto& x : v)
 	{
 		std::cout << x << std::endl;
 	}
-	std::cout << "---------------------" << std::endl;
+	std::cout << "--------------" << std::endl;
 }
 
 int getLength()
@@ -220,4 +229,31 @@ PasswordDifficulty getDifficulty()
 
 	} while (value[0] - '0' < 0 || value[0] - '0' > 2 || value.size() > 1);
 	return static_cast<PasswordDifficulty>(value[0] - '0'); // returns entered difficulty
+}
+
+void saveToFile(const std::vector<std::string>& passwords)
+{
+	std::ofstream outputFile("passwords.txt", std::fstream::out | std::fstream::app);
+	
+	if (outputFile.is_open())
+	{
+		std::time_t current_time = std::time(0);
+		std::tm* timestamp = std::localtime(&current_time);
+		char buffer[80];
+		strftime(buffer, 80, "%c", timestamp);
+
+
+		outputFile << '[' << buffer << ']' << std::endl;
+		for (const auto& password : passwords)
+		{
+			outputFile << password << std::endl;
+		}
+		std::cout << "Successfully saved in \"passwords.txt\"" << std::endl;
+	} 
+	else
+	{
+		std::cerr << "An error occured while saving in file!" << std::endl;
+	}
+
+	outputFile.close();
 }
